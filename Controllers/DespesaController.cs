@@ -23,12 +23,17 @@ public class DespesaController : ControllerBase
         _mapper = mapper;
     }
 
-    public bool VerificarDescricaoNoMesmoMes<T>(T t) where T : IDescricaoDto
+    //usando o metodo gerenerico e implemetando a interface de descricao que compoe "Descricao", "Data"
+    //fazendo assim o metodo Generico so vai aceitar os objetos que compoe a Interface, garantindo que tenha DESCRICAO e DATA
+    //Em seguida fazendo o LINQ para verificar a descricao na mesma data fazendo comparacao com o paremetro que recebemos "objetoNovoCadastrado"
+    //
+    //
+    public bool VerificarDescricaoNoMesmoMes<T>(T objetoNovoCadastrado) where T : IDescricaoDto
     {
         bool receitaVerificao = _context.Despesa
-         .Where(registro => registro.Descricao.ToLower() == t.Descricao.ToLower())
-         .Where(registro => registro.Data.Month == t.Data.Month)
-           .Any(registro => registro.Data.Year == t.Data.Year);
+         .Where(registro => registro.Descricao.ToLower() == objetoNovoCadastrado.Descricao.ToLower())
+         .Where(registro => registro.Data.Month == objetoNovoCadastrado.Data.Month)
+           .Any(registro => registro.Data.Year == objetoNovoCadastrado.Data.Year);
 
         return receitaVerificao;
 

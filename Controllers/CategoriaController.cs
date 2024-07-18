@@ -52,7 +52,7 @@ public class CategoriaController : ControllerBase
     {
         //pegando o primeiro por padrao onde categoria.id seja igual ao paremetro ID passado. 
         //Apos verificando se nao e null se for retornando um erro notFound
-        //Caso nao for nulo Intanciamos a ReadCategoria que vai receber o mapeamento da query feita a cima 
+        //Caso nao for nulo Intanciamos a ReadCategoria que vai receber o mapeamento do LINQ feita a cima 
         var categoria = _context.Categoria.FirstOrDefault(categoria => categoria.Id == id);
         if (categoria != null)
         {
