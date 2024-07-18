@@ -11,5 +11,7 @@ public class DespesaProfile : Profile
     {
         CreateMap<CreateDespesaDto, Despesa>();
         CreateMap<UpdateDespesaDto, Despesa>();
+        CreateMap<Despesa, ReadDespesaDto>().ForMember(despesaDto => despesaDto.ReadCategoriaDto, 
+            opt => opt.MapFrom(categoria => categoria.Categoria));
     }
 }

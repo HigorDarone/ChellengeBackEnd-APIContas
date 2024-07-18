@@ -2,8 +2,8 @@
 
 namespace ChellengeBackEnd_APIContas.DTO;
 
-public class UpdateDespesaDto
-{
+public class UpdateDespesaDto : IDescricaoDto
+{ 
     [Required(ErrorMessage = "A descricao e obrigatorio")]
     [StringLength(60)]
     public string Descricao { get; set; }
@@ -13,5 +13,5 @@ public class UpdateDespesaDto
 
     [Required(ErrorMessage = "A Data e obrigatorio")]
     public DateTime Data { get; set; }
-
+    public int? CategoriaId { get; set; }
 }

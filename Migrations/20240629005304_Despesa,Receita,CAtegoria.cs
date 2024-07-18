@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ChellengeBackEnd_APIContas.Migrations
 {
-    public partial class CriandoTabelasReceitaEDespesa : Migration
+    public partial class DespesaReceitaCAtegoria : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,19 +14,17 @@ namespace ChellengeBackEnd_APIContas.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Despesa",
+                name: "Categoria",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Descricao = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Valor = table.Column<int>(type: "int", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Categorizacao = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Despesa", x => x.Id);
+                    table.PrimaryKey("PK_Categoria", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -46,6 +44,35 @@ namespace ChellengeBackEnd_APIContas.Migrations
                     table.PrimaryKey("PK_Receita", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Despesa",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Descricao = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Valor = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Despesa", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Despesa_Categoria_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categoria",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Despesa_CategoriaId",
+                table: "Despesa",
+                column: "CategoriaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -55,6 +82,9 @@ namespace ChellengeBackEnd_APIContas.Migrations
 
             migrationBuilder.DropTable(
                 name: "Receita");
+
+            migrationBuilder.DropTable(
+                name: "Categoria");
         }
     }
 }

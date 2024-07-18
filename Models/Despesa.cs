@@ -20,4 +20,7 @@ public class Despesa
     [Required(ErrorMessage = "A Data e obrigatorio")]
     public DateTime Data  { get; set; }
 
+    public int? CategoriaId { get; set; }
+    public virtual Categoria Categoria { get; set; }
+
 }

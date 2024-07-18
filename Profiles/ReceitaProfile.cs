@@ -10,6 +10,7 @@ namespace ChellengeBackEnd_APIContas.Profiles;
     {
         CreateMap<CreateReceitaDto, Receita>();
         CreateMap<UpdateReceitaDto, Receita>();
+        CreateMap<Receita, ReadReceitaDto>();
     }
 
 }

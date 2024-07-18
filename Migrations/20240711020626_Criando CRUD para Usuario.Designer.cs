@@ -3,6 +3,7 @@ using System;
 using ChellengeBackEnd_APIContas.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChellengeBackEnd_APIContas.Migrations
 {
     [DbContext(typeof(ChallengeContext))]
-    partial class ChallengeContextModelSnapshot : ModelSnapshot
+    [Migration("20240711020626_Criando CRUD para Usuario")]
+    partial class CriandoCRUDparaUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

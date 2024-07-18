@@ -10,7 +10,7 @@ public class Receita
 
     [Required(ErrorMessage = "A descricao e obrigatorio")]
     [MaxLength(60)] 
-    public string Descricao { get; set; }
+    public string? Descricao { get; set; }
 
     [Required(ErrorMessage = "O Valor e obrigatorio")]
     public int Valor { get; set; }

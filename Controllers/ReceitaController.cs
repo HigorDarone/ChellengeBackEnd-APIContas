@@ -23,12 +23,12 @@ public class ReceitaController : ControllerBase
         _mapper = mapper;
     }
 
-    public bool VerificarDescricaoNoMesmoMes<TDto>(TDto dto) where TDto : IDescricaoDto
+    public bool VerificarDescricaoNoMesmoMes<T>(T t) where T : IDescricaoDto
     {
-        bool receitaVerificao = _context.Receita
-         .Where(registro => registro.Descricao.ToLower() == dto.Descricao.ToLower())
-         .Where(registro => registro.Data.Month == dto.Data.Month)
-           .Any(registro => registro.Data.Year == dto.Data.Year);
+          bool receitaVerificao = _context.Receita
+         .Where(registro => registro.Descricao.ToLower() == t.Descricao.ToLower())
+         .Where(registro => registro.Data.Month == t.Data.Month)
+           .Any(registro => registro.Data.Year == t.Data.Year);
 
         return receitaVerificao;
 
@@ -41,7 +41,7 @@ public class ReceitaController : ControllerBase
 
         if (receitaVericar) 
         {
-             return NotFound("Essa Descricao ja existe nesse Mes");
+             return NotFound("Receita com a mesma descricao ja criada nesse mes");
         }
 
         Receita receita = _mapper.Map<Receita>(createReceitaDto);
@@ -54,9 +54,19 @@ public class ReceitaController : ControllerBase
 
     [HttpGet]
 
-    public IEnumerable<Receita> RecuperarReceita()
+    public IEnumerable<ReadReceitaDto> RecuperarReceita(
+        [FromQuery] string? descricaoReceita = null)
+
+        
     {
-        return _context.Receita;
+        if (descricaoReceita == null)
+        {
+            return _mapper.Map<List<ReadReceitaDto>>(_context.Receita.ToList());
+        }
+        else
+        { 
+           return _mapper.Map<List<ReadReceitaDto>>(_context.Receita.Where(receita => receita.Descricao == descricaoReceita).ToList());
+        }
     }
 
     [HttpGet("{Id}")]
@@ -66,6 +76,20 @@ public class ReceitaController : ControllerBase
         if (receita == null) return NotFound();
         return Ok(receita);
     }
+
+    [HttpGet("{Mes}/{Ano}")]
+    public IActionResult RecuperarPelaData(int mes, int ano)
+    {
+        var retornarDadosDto = _mapper.Map<List<ReadReceitaDto>>(_context.Receita.Where(receita => receita.Data.Month == mes
+       && receita.Data.Year == ano).ToList());
+
+        if (retornarDadosDto == null)
+        {
+            return NoContent();
+        }
+        return Ok(retornarDadosDto);
+    }
+
 
     [HttpPut("{Id}")]
     public IActionResult AtualizarReceitaPorId(int id, [FromBody] UpdateReceitaDto updateReceitaDto) 
@@ -86,8 +110,18 @@ public class ReceitaController : ControllerBase
         _context.SaveChanges();
         return NoContent(); 
     }
+    [HttpDelete("{id}")]
+    public IActionResult DeletarReceitaPeloId(int id)
+    {
+        var receita = _context.Despesa.FirstOrDefault(receita => receita.Id == id);
+        if (receita == null) return NotFound();
 
-   
+        _context.Remove(receita);
+        _context.SaveChanges();
+        return NoContent();
+
+    }
+
 }
 
 

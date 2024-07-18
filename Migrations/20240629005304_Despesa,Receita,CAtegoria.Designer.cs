@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChellengeBackEnd_APIContas.Migrations
 {
     [DbContext(typeof(ChallengeContext))]
-    [Migration("20240615214452_CriandoTabelasReceitaEDespesa")]
-    partial class CriandoTabelasReceitaEDespesa
+    [Migration("20240629005304_Despesa,Receita,CAtegoria")]
+    partial class DespesaReceitaCAtegoria
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,10 +21,28 @@ namespace ChellengeBackEnd_APIContas.Migrations
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ChellengeBackEnd_APIContas.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Categorizacao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categoria");
+                });
+
             modelBuilder.Entity("ChellengeBackEnd_APIContas.Models.Despesa", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
@@ -39,6 +57,8 @@ namespace ChellengeBackEnd_APIContas.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
 
                     b.ToTable("Despesa");
                 });
@@ -63,6 +83,22 @@ namespace ChellengeBackEnd_APIContas.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Receita");
+                });
+
+            modelBuilder.Entity("ChellengeBackEnd_APIContas.Models.Despesa", b =>
+                {
+                    b.HasOne("ChellengeBackEnd_APIContas.Models.Categoria", "Categoria")
+                        .WithMany("Despesas")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+                });
+
+            modelBuilder.Entity("ChellengeBackEnd_APIContas.Models.Categoria", b =>
+                {
+                    b.Navigation("Despesas");
                 });
 #pragma warning restore 612, 618
         }
